@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>邮箱验证码</title>
+    <style>
+        a{
+            color: #C2BE9E;
+            text-decoration: none;
+        }
+        a:hover{
+            color: darkorange;
+        }
+        .qrCode-div{
+            text-align: center;
+        }
+        .qrCode{
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+<h1 style="color: darkgoldenrod; text-align: center;">私有视频网</h1>
+<p style="text-align: center;">
+    您的邮箱验证码为：
+    <span style="color: red;" th:text="${emailCode}"></span>，请注意查收
+</p>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>激活账户</title>
+    <style>
+        a{
+            color: #C2BE9E;
+            text-decoration: none;
+        }
+        a:hover{
+            color: darkorange;
+        }
+        .qrCode-div{
+            text-align: center;
+        }
+        .qrCode{
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+<h1 style="color: darkgoldenrod; text-align: center;">统一认证中心</h1>
+<p style="text-align: center;">
+    您注册的账号为：
+    <span style="color: red;" th:text="${userCode}"></span>，
+    <a th:href="@{'http://192.168.3.33:9090/author/activeAccount/'+${userCode}}">
+        点此击激活您的账号!
+    </a>
+</p>
+<div class="qrCode-div">
+    <p style="text-align: center;">您也可以扫描下方二维码激活账号</p>
+    <img class="qrCode" th:src="${qrCode}" />
+</div>
+</body>
+</html>

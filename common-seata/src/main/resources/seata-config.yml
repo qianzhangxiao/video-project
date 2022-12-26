@@ -1,0 +1,20 @@
+seata:
+  enabled: true
+  registry:
+    nacos:
+      server-addr: localhost:8848
+      group: SEATA_GROUP #Seata分组名（应与seata-server实际注册的分组名一致）
+      namespace: b600ba74-265d-40ee-ba2f-61261d159aa1
+      application: seata-server #Seata服务名（应与seata-server实际注册的服务名一致）
+    type: nacos
+  config:
+    nacos:
+      server-addr: localhost:8848
+      group: SEATA_GROUP
+      namespace: b600ba74-265d-40ee-ba2f-61261d159aa1
+    type: nacos
+  tx-service-group: default_tx_group #事务分组配置（在v1.5之后默认值为default_tx_group,default_tx_group为脚本service.vgroupMapping.default_tx_group=default一致）
+  service:
+    vgroup-mapping:
+      default_tx_group: default #指定事务分组至集群映射关系（等号右侧的集群名需要与Seata-server注册到Nacos的cluster保持一致）
+  application-id: common-seata

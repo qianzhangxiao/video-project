@@ -1,0 +1,29 @@
+server:
+  port: 9098
+spring:
+  application:
+    name: socket-service
+  profiles:
+    active: dev
+  cloud:
+    #这两个配置文件合起来就是从配置中心拉取命名空间id为c14f418f-bede-4627-a15b-799595757619下的devGroup组下的cloudalibaba-config-service-dev.yaml配置文件信息
+    #文件名的默认组成：【命名空间id】 【分组】 {cloudalibaba-config-service}-{spring.profiles.active}.{file-extension}
+    nacos:
+      discovery:
+        server-addr: localhost:8848  #注册中心地址
+        namespace: f4571e6f-7066-46d9-91bf-776404c640cc
+        group: devGroup
+        enabled: true
+      config:
+        server-addr: localhost:8848  #配置中心地址
+        file-extension: yml  #后缀名
+        group: devGroup  #分组
+        namespace: f4571e6f-7066-46d9-91bf-776404c640cc  #命名空间的ID
+        enabled: true
+        shared-configs:
+          - data-id: redis-common.yml
+            group: devGroup
+            refresh: true
+          - data-id: mysql-common.yml
+            group: devGroup
+            refresh: true

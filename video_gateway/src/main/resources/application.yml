@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true #是否将服务名称转为小写
+      # websocket配置
+      routes:
+        - id: socket-service
+          uri: lb:ws://socket-service # lb:// 根据服务名称从注册中心获取服务请求
+          predicates: #断言，判断条件
+            - Path=/chat/** # 匹配对应url的请求，将匹配到的请求追加到目标uri后面，相当于uri/Path
