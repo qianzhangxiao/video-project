@@ -26,4 +26,30 @@
 	rabbitMq
 	websocket
 
+### 微服务模块
+	- common-config：
+		描述：用户登录鉴权配置、常用工具类、基础表查询
+	
+	- common-seata：
+		描述:分布式事务
+	
+	- video-gateway：
+		描述：网关
+		端口：9091
+
+	- user-system：
+		描述：用户注册、登录、用户信息维护等
+		端口：9090
+	
+	- video-service：
+		描述：视频管理服务
+		端口：9092
+	
+	- email-service：
+		描述：邮件服务，发送邮件
+		端口：9095
+	
+	- socket-service：
+		描述：websocket服务端，后续聊天服务使用
+		端口：9098
 
