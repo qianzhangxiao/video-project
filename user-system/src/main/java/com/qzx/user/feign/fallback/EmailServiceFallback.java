@@ -1,10 +1,12 @@
 package com.qzx.user.feign.fallback;
 
+import com.qzx.user.dto.EmailInfo;
 import com.qzx.user.feign.service.EmailService;
 import com.qzx.user.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Component
@@ -25,6 +27,11 @@ public class EmailServiceFallback implements FallbackFactory<EmailService> {
             @Override
             public ResponseResult<?> addUser() {
                 return ResponseResult.error(500,"新增用户失败");
+            }
+
+            @Override
+            public ResponseResult<?> sendEmailWithFile(MultipartFile[] files, EmailInfo emailInfo) {
+                return ResponseResult.error(500,"邮件发送失败");
             }
         };
     }

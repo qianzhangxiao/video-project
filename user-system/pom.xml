@@ -81,6 +81,12 @@
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-datasource-nacos</artifactId>
         </dependency>
+        <!-- seata配置 -->
+        <dependency>
+            <groupId>com.qzx</groupId>
+            <artifactId>common-seata</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <!--打成可执行jar包需要一下依赖-->
     <build>

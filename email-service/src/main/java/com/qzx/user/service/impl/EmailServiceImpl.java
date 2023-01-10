@@ -3,10 +3,11 @@ package com.qzx.user.service.impl;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
+import com.qzx.user.dto.EmailInfo;
 import com.qzx.user.entity.VoUserRoleEntity;
 import com.qzx.user.service.IEmailService;
 import com.qzx.user.service.VoUserRoleService;
-import com.qzx.user.util.EmailInfo;
+import com.qzx.user.util.EmailFileInfo;
 import com.qzx.user.util.EmailUtil;
 import com.qzx.user.utils.ResponseResult;
 import io.seata.core.context.RootContext;
@@ -14,10 +15,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -72,6 +77,17 @@ public class EmailServiceImpl implements IEmailService {
     }
 
     @Override
+    public ResponseResult<?> sendEmailWithFile(MultipartFile[] files, EmailInfo emailInfo) {
+        final List<EmailFileInfo> fileList = Arrays.stream(files).map(res -> {
+            EmailFileInfo fileInfo = new EmailFileInfo();
+            fileInfo.setFile(res);
+            fileInfo.setFileName(res.getOriginalFilename());
+            return fileInfo;
+        }).collect(Collectors.toList());
+        return emailUtil.sendEmail(emailInfo,fileList)?ResponseResult.success():ResponseResult.error(500,"邮件发送异常");
+    }
+
+    @Override
     public ResponseResult<?> addUser() {
         // 手动绑定xId（使用传参方式传递xId），不推荐使用
         // RootContext.bind(xId);
@@ -80,6 +96,7 @@ public class EmailServiceImpl implements IEmailService {
             setUserId(33L);
             setRoleId(22L);
         }});
+        System.out.println(1/0);
         return ResponseResult.success();
     }
 }

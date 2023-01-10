@@ -1,4 +1,4 @@
-package com.qzx.user.util;
+package com.qzx.user.dto;
 
 import lombok.Data;
 

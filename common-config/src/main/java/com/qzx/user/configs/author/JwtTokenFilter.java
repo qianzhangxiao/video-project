@@ -8,8 +8,6 @@ import com.qzx.user.entity.VoUserEntity;
 import com.qzx.user.utils.JwtTokenUtil;
 import com.qzx.user.utils.RedisUtil;
 import com.qzx.user.utils.SecurityUserUtil;
-import io.seata.common.util.StringUtils;
-import io.seata.core.context.RootContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +32,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        handleSeataXid(request);
         final String token = request.getHeader("token");
         if (ObjectUtils.isEmpty(token)){
             filterChain.doFilter(request,response);
@@ -53,18 +50,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(new CustomAuthenticationToken(userDetails,null,userDetails.getAuthorities()));
         }
         filterChain.doFilter(request,response);
-    }
-
-    /**
-     * 处理seata配置
-     * */
-    private void handleSeataXid(HttpServletRequest request){
-        String xid = RootContext.getXID();
-        String rpcXid = request.getHeader("TX_XID");
-        if (StringUtils.isBlank(xid) && StringUtils.isNotBlank(rpcXid)) {
-            RootContext.bind(rpcXid);
-            log.info("rpcXid=====>{}",rpcXid);
-        }
     }
 
 }

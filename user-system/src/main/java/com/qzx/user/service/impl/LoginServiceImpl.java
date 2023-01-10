@@ -8,6 +8,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.qzx.user.dto.EmailInfo;
 import com.qzx.user.utils.Constant;
 import com.qzx.user.dto.CustomAuthenticationToken;
 import com.qzx.user.dto.LoginUser;
@@ -31,11 +32,11 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -289,7 +290,7 @@ public class LoginServiceImpl implements ILoginService {
      */
     @GlobalTransactional(rollbackFor = Exception.class)
     @Override
-    public ResponseResult<?> testSeate() {
+    public ResponseResult<?> testSeata() {
         log.info("Seata全局事务id=================>{}", RootContext.getXID());
         voUserService.save(new VoUserEntity(){{
             setUserName("123");
@@ -302,5 +303,10 @@ public class LoginServiceImpl implements ILoginService {
             throw new BusinessException(result.getMsg());
         }
         return ResponseResult.success("成功");
+    }
+
+    @Override
+    public ResponseResult<?> sendEmail(MultipartFile[] files, EmailInfo emailInfo) {
+        return emailService.sendEmailWithFile(files,emailInfo);
     }
 }

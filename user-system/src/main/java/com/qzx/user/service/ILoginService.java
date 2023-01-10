@@ -1,10 +1,10 @@
 package com.qzx.user.service;
 
+import com.qzx.user.dto.EmailInfo;
 import com.qzx.user.dto.LoginUser;
 import com.qzx.user.entity.VoUserEntity;
 import com.qzx.user.utils.ResponseResult;
-
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ILoginService {
 
@@ -26,5 +26,7 @@ public interface ILoginService {
 
     void logout(String token);
 
-    ResponseResult<?> testSeate();
+    ResponseResult<?> testSeata();
+
+    ResponseResult<?> sendEmail(MultipartFile[] files, EmailInfo emailInfo);
 }
