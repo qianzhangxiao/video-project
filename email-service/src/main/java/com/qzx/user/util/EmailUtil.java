@@ -89,7 +89,7 @@ public class EmailUtil {
         mailMessage.setSubject(info.getSubject()); //发送主题
         mailMessage.setText(info.getText()); //发送内容
         mailMessage.setTo(info.getTo()); //接收人
-        mailMessage.setFrom(info.getFrom()+"<"+userName+">");
+        mailMessage.setFrom(info.getFrom()+"<"+userName+">"); //发送方
         myJavaMailSender.send(mailMessage);
         return true;
     }
