@@ -86,9 +86,9 @@ public class EmailUtil {
      */
     public boolean sendSimpleEmail(EmailInfo info){
         SimpleMailMessage mailMessage=new SimpleMailMessage();
-        mailMessage.setSubject(info.getSubject());
-        mailMessage.setText(info.getText());
-        mailMessage.setTo(info.getTo());
+        mailMessage.setSubject(info.getSubject()); //发送主题
+        mailMessage.setText(info.getText()); //发送内容
+        mailMessage.setTo(info.getTo()); //接收人
         mailMessage.setFrom(info.getFrom()+"<"+userName+">");
         myJavaMailSender.send(mailMessage);
         return true;
