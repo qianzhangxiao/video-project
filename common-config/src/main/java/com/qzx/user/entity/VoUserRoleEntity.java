@@ -16,6 +16,7 @@ import lombok.Data;
 @Data
 public class VoUserRoleEntity implements Serializable {
 
+    private static final long serialVersionUID = -6907289436925795156L;
     /**
     * 
     */

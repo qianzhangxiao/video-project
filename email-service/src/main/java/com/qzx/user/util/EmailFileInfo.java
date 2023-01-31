@@ -9,6 +9,7 @@ import java.io.Serializable;
 @Data
 public class EmailFileInfo implements Serializable {
 
+    private static final long serialVersionUID = -5046546545143407095L;
     /**
      * 文件名称
      */

@@ -18,6 +18,7 @@ import java.util.List;
 @TableName("vo_user")
 public class VoUserEntity implements Serializable {
 
+    private static final long serialVersionUID = -5884999812876720334L;
     /**
      * 将该属性对应的字段指定为主键
      * TableId注解的value属性用于指定主键的字段

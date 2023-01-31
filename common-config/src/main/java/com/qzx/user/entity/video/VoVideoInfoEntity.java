@@ -11,6 +11,8 @@ import java.io.Serializable;
 @TableName("vo_video_info")
 public class VoVideoInfoEntity implements Serializable {
 
+    private static final long serialVersionUID = 5835870475854853992L;
+
     @TableId(type = IdType.AUTO)
     private Long videoId;
 

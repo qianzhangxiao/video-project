@@ -15,6 +15,8 @@ import java.util.Date;
 @TableName("vo_file")
 public class VoFileEntity implements Serializable {
 
+    private static final long serialVersionUID = -6814760381616736062L;
+
     @TableId(type = IdType.AUTO)
     private Long fileId;
 

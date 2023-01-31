@@ -13,9 +13,9 @@ public class CustomSeataConfig {
     @Bean
     public FilterRegistrationBean<SeataFilter> i18nFilterRegistrationBean() {
         FilterRegistrationBean<SeataFilter> registrationBean = new FilterRegistrationBean();
-        SeataFilter myOncePerRequestFilter = new SeataFilter();
+        SeataFilter seataFilter = new SeataFilter();
 
-        registrationBean.setFilter(myOncePerRequestFilter);
+        registrationBean.setFilter(seataFilter);
         registrationBean.addUrlPatterns("/*");
         registrationBean.setOrder(-101); // 设置拦截顺序
         return registrationBean;
