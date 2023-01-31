@@ -1,4 +1,4 @@
-package com.qzx.user.util;
+package com.qzx.user.dto;
 
 import lombok.Data;
 
@@ -13,10 +13,12 @@ import java.util.Map;
 @Data
 public class EmailInfo implements Serializable {
 
+    private static final long serialVersionUID = 7851111206617331703L;
+
     private String from;  //谁发送,默认为此邮箱
     private String to;  //发送给谁
-    private String template; //模板名称(复杂邮件发送，html的名称)
+    private String template; //模板名称(复杂邮件发送，html的名称) --和text二选一
     private String subject; // 主题
-    private String text;    //发送内容
+    private String text;    //发送内容--和template二选一
     private Map<String,Object> variable; //传递模板引擎需要的参数
 }

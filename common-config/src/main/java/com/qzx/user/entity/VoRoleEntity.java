@@ -23,6 +23,7 @@ import java.util.List;
 @TableName("vo_role")
 public class VoRoleEntity implements Serializable {
 
+    private static final long serialVersionUID = 5229388168023768064L;
     /**
     * 权限表ID
     */

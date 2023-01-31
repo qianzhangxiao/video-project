@@ -1,5 +1,6 @@
 package com.qzx.user.conntroller;
 
+import com.qzx.user.dto.EmailInfo;
 import com.qzx.user.dto.LoginUser;
 import com.qzx.user.entity.VoUserEntity;
 import com.qzx.user.service.ILoginService;
@@ -7,9 +8,8 @@ import com.qzx.user.utils.Constant;
 import com.qzx.user.utils.ResponseResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -68,6 +68,11 @@ public class LoginController {
 
     @GetMapping("/testSeata")
     public ResponseResult<?>  testSeata(){
-        return loginService.testSeate();
+        return loginService.testSeata();
+    }
+
+    @GetMapping("/sendEmail")
+    public ResponseResult<?> sendEmail(@RequestParam("file")MultipartFile[] files, EmailInfo emailInfo){
+        return loginService.sendEmail(files,emailInfo);
     }
 }

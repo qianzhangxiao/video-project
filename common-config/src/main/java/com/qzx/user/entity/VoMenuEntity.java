@@ -21,6 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @TableName("vo_menu")
 public class VoMenuEntity implements Serializable {
 
+    private static final long serialVersionUID = -8502285623599868029L;
     /**
     * 
     */

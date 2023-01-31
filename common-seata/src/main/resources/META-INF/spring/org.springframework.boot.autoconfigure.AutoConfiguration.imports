@@ -1,1 +1,2 @@
 com.qzx.user.seata.config.SeataAutoConfig
+com.qzx.user.seata.config.CustomSeataConfig

@@ -14,7 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-
+/**
+ * spring security 用户信息获取
+ */
 @Service
 @RequiredArgsConstructor(onConstructor_ =@Autowired)
 public class UserDetailServiceImpl implements IUserDetailService {

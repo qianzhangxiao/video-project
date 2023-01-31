@@ -28,15 +28,17 @@ public class IOUtil {
 
         File file=getFile(path);
         if(!file.exists()){
-            file.mkdir();
-            return true;
+            return file.mkdir();
         }
         return false;
     }
 
     public static File getFile(String path){
-        File file=new File(path);
-        return file;
+        return new File(path);
+    }
+
+    public static File getFile(String path,String fileName){
+        return new File(path,fileName);
     }
 
     /**
@@ -46,7 +48,7 @@ public class IOUtil {
      * @return
      */
     public static InputStream getInputStream(String path,String fileName){
-        return getInputStreamFromClassPath(getPath(path)+fileName);
+        return getInputStream(getPath(path)+fileName);
     }
 
     /**
@@ -123,14 +125,13 @@ public class IOUtil {
      */
     public static InputStream getInputStreamFromClassPath(String file){
         ClassPathResource classPathResource = new ClassPathResource(file);
-        InputStream inputStream =null;
         try {
-            inputStream= classPathResource.getInputStream();
+            is= classPathResource.getInputStream();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return inputStream;
+        return is;
     }
     private static String getPath(String path){
         if(path.endsWith("/")||path.endsWith("\\")){
@@ -139,21 +140,11 @@ public class IOUtil {
         return path+"/";
     }
 
-    public static void closeIo(){
+    public static void closeIo(Closeable x){
         try {
-            if(is!=null){
-                is.close();
+            if(x!=null){
+                x.close();
             }
-            if(bis!=null){
-                bis.close();
-            }
-            if(os!=null){
-                os.close();
-            }
-            if(bos!=null){
-                bos.close();
-            }
-
         } catch (IOException e) {
             e.printStackTrace();
         }

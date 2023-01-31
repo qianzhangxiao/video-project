@@ -16,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+/**
+ * 自定义登录鉴权
+ */
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CustomAuthenticationProvider implements AuthenticationProvider {

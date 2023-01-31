@@ -1,12 +1,17 @@
 package com.qzx.user.feign.service;
 
+import com.qzx.user.dto.EmailInfo;
+import com.qzx.user.entity.VoUserEntity;
 import com.qzx.user.feign.config.LoadBalanceConfig;
 import com.qzx.user.feign.fallback.EmailServiceFallback;
 import com.qzx.user.utils.ResponseResult;
 import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClient;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 /*声明需要调用的服务--服务降级可以打印异常信息*/
 @FeignClient(value = "email-service",fallbackFactory = EmailServiceFallback.class)
@@ -22,5 +27,8 @@ public interface EmailService {
 
     @GetMapping("/email/addUser")
     ResponseResult<?> addUser();
+
+    @GetMapping(value = "/email/sendEmailWithFile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseResult<?> sendEmailWithFile(@RequestPart("file")MultipartFile[]files, @RequestPart("emailInfo") EmailInfo emailInfo);
 
 }
