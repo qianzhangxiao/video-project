@@ -6,7 +6,10 @@ import java.io.Serializable;
 
 @Data
 public class UploadFileInfo implements Serializable {
-
+    /**
+     * 原始文件名称
+     */
+    private String originalFileName;
     /**
      * 文件名称
      */
@@ -46,5 +49,10 @@ public class UploadFileInfo implements Serializable {
      * 文件大小
      */
     private Long fileSize;
+
+    /**
+     * 文件后缀
+     */
+    private String suffix;
 
 }

@@ -1,5 +1,7 @@
 package com.qzx.user.utils;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ObjectUtils;
@@ -123,77 +125,47 @@ public class UploadUtils {
      * 单文件上传
      *
      * @param realPath：文件路径，需要
-     * @param multipartFile
-     * @return
+     * @param changeFileName 是否修改文件名称
+     *
      */
-    public static Map<String, Object> uploadFile(String realPath, MultipartFile multipartFile) {
-        Map<String, Object> map = new HashMap<>();
+    public static UploadFileInfo uploadFile(String realPath, MultipartFile multipartFile,Boolean changeFileName) throws IOException {
         try {
             String filePath = mkDir(realPath);
-//            String filePath=mkDirOnClass(realPath);
-            // 获取文件路径及名称
-            String fileNamePath = filePath.substring(filePath.indexOf(realPath));
-            // 获取文件原始名称
-            String oldFileName = multipartFile.getOriginalFilename();
-            // 获取文件类型
-            String fileType = multipartFile.getContentType();
-            // 获取文件大小
-            Long fileSize = multipartFile.getSize();
-            // 获取文件后缀
-            String suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
-            // 真实文件名
-            String realFileName = new SimpleDateFormat("yyyyMMddHHmmss")
-                    .format(new Date()) + "_" + UUID.randomUUID().toString().replace("-", "") + suffix;
-            multipartFile.transferTo(new File(filePath, realFileName));
-            map.put("oldFileName", oldFileName);
-            map.put("fileSize", fileSize);
-            map.put("suffix", suffix);
-            map.put("fileType", fileType);
-            map.put("filePath", filePath);
-            map.put("filePathName", fileNamePath + "/" + realFileName);
-            map.put("realFileName", realFileName);
+            UploadFileInfo fileInfo = handleFileInfo(multipartFile);
+            if (changeFileName){//如果需要修改文件名称
+                // 修改后文件名
+                StringBuilder sb = new StringBuilder(new SimpleDateFormat("yyyyMMddHHmm").format(new Date())).append("_");
+                sb.append(IdUtil.simpleUUID()).append(fileInfo.getSuffix());
+                fileInfo.setRealPath(filePath+File.separator+sb);
+                fileInfo.setFileName(sb.toString());
+            }else{
+                fileInfo.setRealPath(filePath+File.separator+fileInfo.getOriginalFileName());
+            }
+            multipartFile.transferTo(new File(fileInfo.getRealPath()));
+            return fileInfo;
         } catch (IOException e) {
             e.printStackTrace();
-            map.put("msg", "文件上传异常");
+            throw new IOException("文件上传异常");
         }
-        return map;
     }
 
     /**
      * 多文件上传
-     *
-     * @param request
-     * @param pathName：文件map，key:前台file名称，value，文件存储路径
-     * @return
      */
-    public static Map<String, Map<String, Object>> uploadFiles(HttpServletRequest request, Map<String, Object> pathName) {
-        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
-        Map<String, Map<String, Object>> map = new HashMap<>();
-        if (!commonsMultipartResolver.isMultipart(request)) {
-            throw new RuntimeException("请求不包含文件，请仔细核对");
+    public static List<UploadFileInfo> uploadFiles(String realPath,MultipartFile[] files,Boolean changeFileName) throws IOException {
+        List<UploadFileInfo> result = new ArrayList<>();
+        for (MultipartFile file : files) {
+            result.add(uploadFile(realPath,file,changeFileName));
         }
-        MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-        Iterator<String> iter = multiRequest.getFileNames();
-        while (iter.hasNext()) {
-            MultipartFile file = multiRequest.getFile(iter.next());
-            pathName.forEach((k, v) -> {
-                //file.getName()  获取前台file的name值，map的key需要和name值对应
-                if (k.equals(file.getName())) {
-//                    System.out.println(k+","+file.getName());
-                    Map<String, Object> uploadFile = uploadFile(v.toString(), file);
-                    map.put(k, uploadFile);
-                }
-            });
-        }
-        return map;
+        return result;
     }
 
     // 服务器项目上传至真实路径
     private static String mkDir(String realPath) {
         StringBuilder sb = new StringBuilder(realPath);
         String datePath = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        if (!realPath.endsWith("/")) {
-            sb.append("/");
+        if (!realPath.endsWith("/")||!realPath.endsWith("\\")) {
+            sb.append(File.separator);
         }
         sb.append(datePath);
         File file = new File(sb.toString());
@@ -212,7 +184,7 @@ public class UploadUtils {
         String parentPath = array[0];
 
         String path = new ClassPathResource(parentPath).getURL().getPath();
-        String datePath = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String datePath = new SimpleDateFormat("yyyyMMdd").format(new Date());
 //        realPath=ResourceUtils.getURL(path+"/"+datePath).getPath();
         String realFilepath;
         if (array.length == 2) {
@@ -248,5 +220,29 @@ public class UploadUtils {
         strArr[0] = splitFirst;
         strArr[1] = sb.toString();
         return strArr;
+    }
+
+    /**
+     * 获取文件基础信息
+     * @param file 附件
+     * @return 附件基础信息
+     */
+    public static UploadFileInfo handleFileInfo(MultipartFile file) throws IOException {
+        return new UploadFileInfo(){{
+            setFileSize(file.getSize());
+            setFileType(file.getContentType());
+            setOriginalFileName(file.getOriginalFilename());
+            setGuid(getFileMd5(file.getInputStream()));
+            setSuffix(Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".")));
+        }};
+    }
+
+    /**
+     * 获取附件md5
+     * @param inputStream 输入流
+     * @return 附件md5
+     */
+    public static String getFileMd5(InputStream inputStream){
+        return DigestUtil.md5Hex(inputStream);
     }
 }
