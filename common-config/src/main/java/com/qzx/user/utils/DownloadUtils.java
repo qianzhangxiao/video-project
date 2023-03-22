@@ -1,5 +1,6 @@
 package com.qzx.user.utils;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import org.springframework.http.MediaType;
 
@@ -7,6 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -86,18 +92,24 @@ public class DownloadUtils {
      *
      *压缩文件并下载
      * fileName:压缩文件名称,后缀为.zip
-     *map:
-     * key:fileName,文件名称
-     * key:inputStream，文件流
+     * DownloadFileInfo:
+     *  fileName,文件名称
+     *  InputStream，文件流
      */
-
     public static void zipDownload(HttpServletResponse response,String fileName, List<DownloadFileInfo> files) throws IOException {
+        setResponse(response,fileName);
+        zipDownload(response.getOutputStream(),files);
+    }
+    /**
+     *
+     *压缩文件并下载到指定目录
+     * DownloadFileInfo:
+     *  fileName,文件名称
+     *  InputStream，文件流
+     */
+    public static void zipDownload(OutputStream outputStream, List<DownloadFileInfo> files) throws IOException {
         try{
-            response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
-            //下载显示的文件名，解决中文名称乱码问题
-            String downloadFileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
-            response.setHeader("Content-Disposition", "attachment; filename=" + downloadFileName);
-            ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
+            ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
             for (DownloadFileInfo file : files) {
                 zipOutputStream.putNextEntry(new ZipEntry(file.getFileName()));
                 IoUtil.copy(file.getInputStream(),zipOutputStream);
@@ -109,7 +121,51 @@ public class DownloadUtils {
             e.printStackTrace();
             throw new IOException("压缩文件下载异常");
         }
+    }
+    /**
+     * 压缩指定目录
+     */
+    public static void zipDownload(Path sourceFolderPath, Path zipPath) throws IOException {
+        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipPath.toFile()));
+        zipCompress(sourceFolderPath,zos);
+    }
+    /**
+     * 压缩指定目录
+     */
+    public static void zipDownload(Path sourceFolderPath, File zipFile) throws IOException {
+        ZipOutputStream zos = new ZipOutputStream(IoUtil.toBuffered(FileUtil.getOutputStream(zipFile)));
+        zipCompress(sourceFolderPath,zos);
+    }
+    /**
+     * 压缩指定目录
+     */
+    public static void zipDownload(Path sourceFolderPath, OutputStream outputStream) throws IOException {
+        ZipOutputStream zos = new ZipOutputStream(IoUtil.toBuffered(outputStream));
+        zipCompress(sourceFolderPath,zos);
+    }
+    /**
+     * 压缩指定目录
+     */
+    public static void zipDownload(Path sourceFolderPath, HttpServletResponse response,String fileName) throws IOException {
+        setResponse(response,fileName);
+        ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
+        zipCompress(sourceFolderPath,zos);
+    }
 
+    /**
+     * 压缩指定目录
+     */
+    private static void zipCompress(Path sourceFolderPath,ZipOutputStream zos) throws IOException {
+        Files.walkFileTree(sourceFolderPath, new SimpleFileVisitor<Path>() {
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString()));
+                IoUtil.copy(IoUtil.toBuffered(FileUtil.getInputStream(file.toFile())),zos);
+                zos.flush();
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        zos.closeEntry();
+        zos.close();
     }
 
 
