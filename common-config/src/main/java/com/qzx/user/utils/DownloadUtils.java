@@ -26,6 +26,30 @@ import java.util.zip.ZipOutputStream;
 public class DownloadUtils {
 
     /**
+     * 文件下载，可以导出txt、json等文件
+     * @param fileName 文件名称
+     * @param bytes 导出的字节数组
+     * @param response 响应流
+     * @throws IOException 异常
+     * 案例：
+     *      DownloadUtils.downloadFile("test.txt","hello world \r\n 新的一天，新的希望！".getBytes(StandardCharsets.UTF_8),response);
+     */
+    public static void downloadFile(String fileName,byte[] bytes,HttpServletResponse response) throws IOException {
+        BufferedOutputStream bos = null;
+        try {
+            setResponse(response,fileName);
+            bos = IoUtil.toBuffered(response.getOutputStream());
+            bos.write(bytes);
+            bos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IOException("文件下载异常");
+        } finally {
+            IoUtil.close(bos);
+        }
+    }
+
+    /**
      *
      * @param fileName 下载的文件名称（浏览器展示的名称）
      * @param inputStream：文件输入流
