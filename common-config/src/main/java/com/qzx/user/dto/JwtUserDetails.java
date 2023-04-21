@@ -1,8 +1,6 @@
 package com.qzx.user.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.qzx.user.entity.VoUserEntity;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +14,8 @@ import java.util.stream.Collectors;
 @Data
 public class JwtUserDetails implements UserDetails {
 
+
+    private static final long serialVersionUID = 717983195495912971L;
 
     private VoUserEntity user;
 
