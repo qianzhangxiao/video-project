@@ -25,7 +25,7 @@ public class VoMenuEntity implements Serializable {
     /**
     * 
     */
-    @TableId(value = "menu_id",type = IdType.AUTO)
+    @TableId
     private Long menuId;
     /**
     * 

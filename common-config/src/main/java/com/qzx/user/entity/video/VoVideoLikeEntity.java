@@ -20,7 +20,7 @@ public class VoVideoLikeEntity implements Serializable {
 
     private static final long serialVersionUID = -2924095771949853535L;
 
-    @TableId(type = IdType.AUTO)
+    @TableId
     private Long id;
 
     /**

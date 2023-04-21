@@ -20,7 +20,7 @@ public class VoUserRoleEntity implements Serializable {
     /**
     * 
     */
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId
     private Long id;
     /**
     * 角色ID

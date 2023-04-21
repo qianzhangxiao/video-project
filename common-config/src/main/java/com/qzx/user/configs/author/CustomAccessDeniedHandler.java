@@ -30,7 +30,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         ServletOutputStream outputStream = response.getOutputStream();
-        new ObjectMapper().writeValue(response.getOutputStream(), ResponseResult.error(500,"权限不足"));
+        new ObjectMapper().writeValue(response.getOutputStream(), ResponseResult.error(403,"权限不足"));
         outputStream.flush();
         outputStream.close();
     }

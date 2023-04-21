@@ -31,7 +31,7 @@ public class CustomAuthorizeFailedHandler implements AuthenticationEntryPoint, S
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         ServletOutputStream outputStream = response.getOutputStream();
-        new ObjectMapper().writeValue(outputStream, ResponseResult.error(500,"认证失败，请先登录"));
+        new ObjectMapper().writeValue(outputStream, ResponseResult.error(401,"认证失败，请先登录"));
         outputStream.flush();
         outputStream.close();
     }

@@ -27,7 +27,7 @@ public class VoRoleEntity implements Serializable {
     /**
     * 权限表ID
     */
-    @TableId(value = "role_id",type = IdType.AUTO)
+    @TableId
     private Long roleId;
     /**
     * 角色编码
