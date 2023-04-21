@@ -62,7 +62,7 @@ public class LoginController {
     }
 
     @GetMapping("/logout")
-    public void logout(@RequestHeader(value = Constant.TOKEN_DESC,required = true)String token ){
+    public void logout(@RequestHeader(value = Constant.TOKEN_DESC)String token ){
         loginService.logout(token);
     }
 
