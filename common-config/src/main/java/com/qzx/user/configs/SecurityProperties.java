@@ -11,8 +11,14 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class SecurityProperties {
 
+    /**
+     * 匿名访问
+     */
     private String[] anonymous;
 
+    /**
+     * 不鉴权访问
+     */
     private String[] permitAll;
 
 }
