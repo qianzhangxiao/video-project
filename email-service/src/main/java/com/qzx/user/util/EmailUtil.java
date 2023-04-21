@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @description:
+ * @description: 邮件发送工具类
  * @author: qc
  * @time: 2020/8/15 14:31
  */
