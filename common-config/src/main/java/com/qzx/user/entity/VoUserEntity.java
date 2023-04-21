@@ -24,7 +24,7 @@ public class VoUserEntity implements Serializable {
      * TableId注解的value属性用于指定主键的字段
      * TableId注解的type属性用于设置主键的生成策略（一定要开启自增）最终插入的主键不再是雪花算法生成的
      * */
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId
     private Long id;
 
     /**

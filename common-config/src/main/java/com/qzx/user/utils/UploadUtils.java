@@ -71,7 +71,7 @@ public class UploadUtils {
         Long start = System.currentTimeMillis();
         String filePath = fileInfo.getTmpPath() + File.separator + fileInfo.getGuid();
         File tmpFile = new File(filePath);
-        File realPath = new File(fileInfo.getRealPath());
+        File realPath = new File(fileInfo.getRealPathName());
         //真实上传路径
         if (!realPath.exists()) {
             realPath.mkdirs();
@@ -136,12 +136,12 @@ public class UploadUtils {
                 // 修改后文件名
                 StringBuilder sb = new StringBuilder(new SimpleDateFormat("yyyyMMddHHmm").format(new Date())).append("_");
                 sb.append(IdUtil.simpleUUID()).append(fileInfo.getSuffix());
-                fileInfo.setRealPath(filePath+File.separator+sb);
+                fileInfo.setRealPathName(filePath+File.separator+sb);
                 fileInfo.setFileName(sb.toString());
             }else{
-                fileInfo.setRealPath(filePath+File.separator+fileInfo.getOriginalFileName());
+                fileInfo.setRealPathName(filePath+File.separator+fileInfo.getOriginalFileName());
             }
-            multipartFile.transferTo(new File(fileInfo.getRealPath()));
+            multipartFile.transferTo(new File(fileInfo.getRealPathName()));
             return fileInfo;
         } catch (IOException e) {
             e.printStackTrace();

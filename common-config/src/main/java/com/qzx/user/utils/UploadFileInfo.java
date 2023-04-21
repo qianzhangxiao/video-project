@@ -38,7 +38,7 @@ public class UploadFileInfo implements Serializable {
     /**
      * 实际路径
      */
-    private String realPath;
+    private String realPathName;
 
     /**
      * 文件类型

@@ -17,7 +17,7 @@ public class VoFileEntity implements Serializable {
 
     private static final long serialVersionUID = -6814760381616736062L;
 
-    @TableId(type = IdType.AUTO)
+    @TableId
     private Long fileId;
 
     /**
@@ -31,9 +31,13 @@ public class VoFileEntity implements Serializable {
     private String filePath;
 
     /**
+     * 附件完整路径
+     */
+    private String filePathName;
+    /**
      *附件大小（kb)
      */
-    private Integer fileSize;
+    private Long fileSize;
 
     /**
      *附件后缀
@@ -68,5 +72,10 @@ public class VoFileEntity implements Serializable {
      * 0：删除，1：正常
      */
     private Byte fileStatus;
+
+    /**
+     * 文件md5
+     */
+    private String fileGuid;
 
 }

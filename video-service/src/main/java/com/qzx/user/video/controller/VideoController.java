@@ -1,8 +1,12 @@
 package com.qzx.user.video.controller;
 
+import com.qzx.user.entity.video.VoVideoInfoEntity;
+import com.qzx.user.utils.ResponseResult;
 import com.qzx.user.video.service.IVideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +20,10 @@ public class VideoController {
     /**
      * 上传视频
      */
-
+    @PostMapping("/saveVideoInfo")
+    public ResponseResult<?> saveVideoInfo(@RequestBody VoVideoInfoEntity videoInfo){
+        return videoService.saveVideoInfo(videoInfo);
+    }
     /**
      * 删除视频
      */
