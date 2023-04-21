@@ -80,22 +80,23 @@ public class MediaUtils {
         return 0L;
     }
 
+    /**
+     * 时间（ms）转为中文
+     */
     public static String videoDurationStr(Long duration){
+        if (duration==0L){
+            return null;
+        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
         return simpleDateFormat.format(duration);
     }
+
     public static String videoDurationStr(MultipartFile file){
-        final Long aLong = videoDuration(file);
-        if (aLong==0L){
-            return null;
-        }
-        return videoDurationStr(aLong);
+        return videoDurationStr(videoDuration(file));
     }
     /**
      * 判断是否是指定媒体文件类型
-     * @param file
-     * @return
      */
     public static boolean judgeFileIsMedia(MultipartFile file){
         final String type = fileType(file);
