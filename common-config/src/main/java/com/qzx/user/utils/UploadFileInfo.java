@@ -55,4 +55,9 @@ public class UploadFileInfo implements Serializable {
      */
     private String suffix;
 
+    /**
+     * 音视频时长
+     */
+    private Long duration;
+
 }

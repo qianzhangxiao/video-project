@@ -78,4 +78,9 @@ public class VoFileEntity implements Serializable {
      */
     private String fileGuid;
 
+    /**
+     * 音视频时长
+     */
+    private Long fileDuration;
+
 }

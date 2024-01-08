@@ -234,6 +234,7 @@ public class UploadUtils {
             setOriginalFileName(file.getOriginalFilename());
             setGuid(getFileMd5(file.getInputStream()));
             setSuffix(Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".")));
+            setDuration(MediaUtils.videoDuration(file));
         }};
     }
 

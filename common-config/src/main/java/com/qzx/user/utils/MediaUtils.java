@@ -9,9 +9,7 @@ import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.info.MultimediaInfo;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -44,19 +42,31 @@ public class MediaUtils {
      * 获取媒体文件时长，单位ms
      */
     public static Long videoDuration(MultipartFile multipartFile){
-        if (null!=multipartFile&&judgeFileIsMedia(multipartFile)){
-            File file = null;
-            BufferedOutputStream outputStream = null;
+        if (null!=multipartFile){
             try {
                 /**
                  * 临时文件
                  */
-                file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+                File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+                return videoDuration(file,multipartFile.getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0L;
+    }
+
+    public static Long videoDuration(File file, InputStream inputStream){
+        if (judgeFileIsMedia(inputStream)){
+            BufferedOutputStream outputStream = null;
+            BufferedInputStream bufferedInputStream = null;
+            try {
                 /**
                  * 文件拷贝至临时文件
                  */
                 outputStream = FileUtil.getOutputStream(file);
-                IoUtil.copy(multipartFile.getInputStream(),outputStream);
+                bufferedInputStream = IoUtil.toBuffered(inputStream);
+                IoUtil.copy(bufferedInputStream,outputStream);
                 /**
                  * 读取文件为媒体文件
                  */
@@ -66,11 +76,14 @@ public class MediaUtils {
                  */
                 final MultimediaInfo info = multimediaObject.getInfo();
                 return info.getDuration();
-            } catch (IOException | EncoderException e) {
+            } catch (EncoderException e) {
                 e.printStackTrace();
             } finally {
                 if (null!=outputStream){
                     IoUtil.close(outputStream);
+                }
+                if (null!=bufferedInputStream){
+                    IoUtil.close(bufferedInputStream);
                 }
                 if (null!=file){
                     file.delete();
@@ -99,6 +112,14 @@ public class MediaUtils {
      * 判断是否是指定媒体文件类型
      */
     public static boolean judgeFileIsMedia(MultipartFile file){
+        try {
+            return judgeFileIsMedia(file.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public static boolean judgeFileIsMedia(InputStream file){
         final String type = fileType(file);
         if (!ObjectUtils.isEmpty(type)&&FILE_TYPE.contains(type)){
             return true;
@@ -108,11 +129,15 @@ public class MediaUtils {
 
     public static String fileType(MultipartFile file){
         try {
-            return FileTypeUtil.getType(file.getInputStream());
+            return fileType(file.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String fileType(InputStream file){
+        return FileTypeUtil.getType(file);
     }
 
 }

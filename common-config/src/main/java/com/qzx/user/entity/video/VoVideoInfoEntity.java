@@ -46,7 +46,7 @@ public class VoVideoInfoEntity implements Serializable {
     /**
      * 视频时长
      */
-    private Integer videoDuration;
+    private Long videoDuration;
 
     /**
      * 视频状态

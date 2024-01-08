@@ -41,6 +41,7 @@ public class IFileServiceImpl implements IFileService {
                 file.setUploadTime(new Date());
                 file.setFileSuffix(res.getSuffix());
                 file.setFileGuid(res.getGuid());
+                file.setFileDuration(res.getDuration());
                 return file;
             }).collect(Collectors.toList());
             return voFileService.saveBatch(fileList)?ResponseResult.success(fileList):ResponseResult.error(500,"文件上传异常");
